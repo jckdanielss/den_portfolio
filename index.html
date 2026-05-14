@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Denisse Anne U. Dela Cruz — Virtual Assistant</title>
+  <title>Denisse Anne U. Dela Cruz — Virtual Assistant with Legacy Virtual Assistance</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,20 +61,58 @@
     .sidebar::-webkit-scrollbar { display: none; }
 
     .sidebar-photo {
-      width: 76px;
-      height: 76px;
+      width: 88px;
+      height: 88px;
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid var(--cream-300);
       margin-bottom: 14px;
       flex-shrink: 0;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .sidebar-photo:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(169,139,111,0.2);
     }
     .sidebar-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: top;
+      object-position: center 15%;
     }
+
+    /* ── PHOTO LIGHTBOX ── */
+    .photo-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    .photo-lightbox.open { display: flex; }
+    .photo-lightbox img {
+      max-width: 92vw;
+      max-height: 92vh;
+      border-radius: 6px;
+      object-fit: contain;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.15s;
+    }
+    .lightbox-close:hover { opacity: 1; }
 
     .sidebar-name {
       font-family: 'Playfair Display', serif;
@@ -222,6 +260,32 @@
       border-radius: 8px;
       border: 1px solid var(--cream-300);
       display: block;
+    }
+    .video-wrapper {
+      position: relative;
+      max-width: 560px;
+    }
+
+    /* ── COPY EMAIL TOAST ── */
+    .email-toast {
+      display: none;
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--warm-900);
+      color: var(--cream-50);
+      font-size: 0.78rem;
+      padding: 10px 20px;
+      border-radius: 4px;
+      z-index: 999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .email-toast.show {
+      display: block;
+      opacity: 1;
     }
 
     /* ── EXPERIENCE TIMELINE ── */
@@ -382,7 +446,16 @@
       transform: translateY(0);
     }
 
-    /* ── MOBILE ── */
+    /* ── TABLET (769px – 1024px) ── */
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: 220px 1fr; }
+      .main { padding: 48px 40px 80px 44px; }
+      .section-title { font-size: 1.6rem; }
+      .section { padding-bottom: 44px; margin-bottom: 44px; }
+      .footer { padding: 16px 44px; }
+    }
+
+    /* ── MOBILE (≤ 768px) ── */
     @media (max-width: 768px) {
       .layout { grid-template-columns: 1fr; }
       .sidebar {
@@ -395,6 +468,26 @@
       .sidebar-contact { margin-top: 16px; padding-top: 16px; }
       .main { padding: 40px 24px 64px; }
       .footer { grid-column: 1; padding: 16px 24px; }
+      .section-title { font-size: 1.5rem; }
+      .section { padding-bottom: 40px; margin-bottom: 40px; max-width: 100%; }
+      .video-wrapper, .intro-video { max-width: 100%; }
+      .contact-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+    }
+
+    /* ── SMALL PHONE (≤ 480px) ── */
+    @media (max-width: 480px) {
+      .sidebar { padding: 20px 16px 20px; }
+      .main { padding: 28px 16px 48px; }
+      .section-title { font-size: 1.3rem; }
+      .section { padding-bottom: 32px; margin-bottom: 32px; }
+      .sidebar-name { font-size: 1rem; }
+      .sidebar-role { letter-spacing: 0.12em; }
+      .tag { font-size: 0.7rem; padding: 4px 9px; }
+      .s-label { font-size: 0.6rem; }
+      .service-row { grid-template-columns: 32px 1fr; }
+      .exp-item { grid-template-columns: 14px 1fr; }
+      .footer { padding: 14px 16px; }
     }
   </style>
 </head>
@@ -405,11 +498,13 @@
   <!-- ── SIDEBAR ── -->
   <aside class="sidebar">
 
-    <div class="sidebar-photo">
+    <div class="sidebar-photo" id="sidebarPhoto" title="Click to view full photo">
       <img src="den_photo_page-0001.jpg" alt="Denisse Anne Dela Cruz" />
     </div>
 
-    <div class="sidebar-name">Denisse Anne<br />Dela Cruz</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+      <div class="sidebar-name" style="margin-bottom:0;">Denisse Anne<br />Dela Cruz</div>
+    </div>
     <div class="sidebar-role">Virtual Assistant</div>
 
     <div class="s-rule"></div>
@@ -460,7 +555,7 @@
     </div>
 
     <div class="sidebar-contact">
-      <a href="mailto:your@email.com">
+      <a href="https://mail.google.com/mail/?view=cm&to=denisseannedelacruz.legacy@gmail.com" target="_blank" rel="noopener">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
         denisseannedelacruz.legacy@gmail.com
       </a>
@@ -475,17 +570,28 @@
     <section id="about" class="section fade-up">
       <div class="section-eyebrow">About Me</div>
       <h1 class="section-title">Hi, I'm Denisse.</h1>
+
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;padding:14px 18px;">
+        <img src="legacy_logo.png" alt="L.E.G.A.C.Y. Virtual Assistance logo" style="width:64px;height:64px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid var(--cream-300);" />
+        <div>
+          <div style="font-size:0.63rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:3px;">Virtual Assistant with</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--warm-900);font-weight:600;line-height:1.2;">Legacy Virtual Assistance</div>
+        </div>
+      </div>
+
       <p class="about-text">
-        Denisse is an experienced professional in customer care and business development,
-        recognised for her strong communication, adaptability, and problem-solving skills.
-        She is dedicated to delivering high-quality results through attention to detail,
+        I'm an experienced professional in customer care and business development,
+        recognised for my strong communication, adaptability, and problem-solving skills.
+        I'm dedicated to delivering high-quality results through attention to detail,
         reliability, and a customer-focused approach. Proficient in outbound and email
-        outreach tools as well as data management, she thrives in fast-paced environments
+        outreach tools as well as data management, I thrive in fast-paced environments
         while building strong client relationships and driving measurable success.
       </p>
-      <video class="intro-video" autoplay muted loop playsinline>
-        <source src="vid1.mp4" type="video/mp4" />
-      </video>
+      <div class="video-wrapper">
+        <video class="intro-video" controls playsinline>
+          <source src="vid1.mp4" type="video/mp4" />
+        </video>
+      </div>
     </section>
 
     <!-- EXPERIENCE -->
@@ -620,10 +726,10 @@
         what you need — reach out and let's get started.
       </p>
       <div class="contact-buttons">
-        <a href="mailto:your@email.com" class="btn btn-primary">
+        <button id="copyEmailBtn" class="btn btn-primary" type="button">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          Email Me
-        </a>
+          <span id="copyEmailLabel">Copy Email Address</span>
+        </button>
       </div>
     </section>
 
@@ -636,7 +742,17 @@
 
 </div>
 
+<!-- Photo lightbox -->
+<div class="photo-lightbox" id="photoLightbox">
+  <span class="lightbox-close" id="lightboxClose">&times;</span>
+  <img src="den_photo_page-0001.jpg" alt="Denisse Anne Dela Cruz" />
+</div>
+
+<!-- Email copy toast -->
+<div class="email-toast" id="emailToast">Email address copied!</div>
+
 <script>
+  // Fade-in observer
   const observer = new IntersectionObserver(
     (entries) => entries.forEach(e => {
       if (e.isIntersecting) {
@@ -647,6 +763,36 @@
     { threshold: 0.08 }
   );
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Photo lightbox
+  const photo = document.getElementById('sidebarPhoto');
+  const lightbox = document.getElementById('photoLightbox');
+  const lightboxClose = document.getElementById('lightboxClose');
+  photo.addEventListener('click', () => lightbox.classList.add('open'));
+  lightboxClose.addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) lightbox.classList.remove('open');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') lightbox.classList.remove('open');
+  });
+
+  // Copy email
+  const copyBtn = document.getElementById('copyEmailBtn');
+  const copyLabel = document.getElementById('copyEmailLabel');
+  const toast = document.getElementById('emailToast');
+  let toastTimer;
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('denisseannedelacruz.legacy@gmail.com').then(() => {
+      copyLabel.textContent = 'Copied!';
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        copyLabel.textContent = 'Copy Email Address';
+        toast.classList.remove('show');
+      }, 2500);
+    });
+  });
 </script>
 
 </body>

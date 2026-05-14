@@ -1,8 +1,7 @@
 # Brainstorming / planning artefacts
-.superpowers/
-docs/
+
 
 # OS
 .DS_Store
 Thumbs.db
-.md
+README.md
