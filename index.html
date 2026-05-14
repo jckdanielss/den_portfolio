@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denisse Anne U. Dela Cruz — Virtual Assistant</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --cream-50:  #FFFDF8;
+      --cream-100: #FAF6EF;
+      --cream-200: #F5EFE3;
+      --cream-300: #EDE3D0;
+      --warm-900:  #3A3631;
+      --warm-700:  #5C564E;
+      --warm-500:  #8A7E72;
+      --accent:    #A98B6F;
+    }
+
+    body {
+      background: var(--cream-100);
+      color: var(--warm-900);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      color: var(--warm-900);
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 272px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--cream-200);
+      border-right: 1px solid var(--cream-300);
+      padding: 44px 28px 40px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: none;
+    }
+    .sidebar::-webkit-scrollbar { display: none; }
+
+    .sidebar-photo {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--cream-300);
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+    .sidebar-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .sidebar-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      color: var(--warm-900);
+      margin-bottom: 5px;
+    }
+
+    .sidebar-role {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 26px;
+    }
+
+    .s-rule {
+      height: 1px;
+      background: var(--cream-300);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      margin-bottom: 26px;
+    }
+    .sidebar-nav a {
+      font-size: 0.78rem;
+      color: var(--warm-700);
+      text-decoration: none;
+      padding: 5px 8px 5px 12px;
+      border-left: 2px solid transparent;
+      border-radius: 0 3px 3px 0;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .sidebar-nav a:hover {
+      color: var(--warm-900);
+      border-left-color: var(--accent);
+      background: var(--cream-300);
+    }
+
+    .s-label {
+      font-size: 0.57rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+    .tag {
+      font-size: 0.65rem;
+      background: var(--cream-300);
+      color: var(--warm-700);
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    .edu-school {
+      font-size: 0.73rem;
+      font-weight: 500;
+      color: var(--warm-900);
+      margin-bottom: 3px;
+    }
+    .edu-detail {
+      font-size: 0.63rem;
+      color: var(--warm-500);
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+
+    .sidebar-contact {
+      margin-top: auto;
+      padding-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sidebar-contact a {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: color 0.15s;
+    }
+    .sidebar-contact a:hover { color: var(--warm-900); }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      padding: 60px 60px 100px 64px;
+    }
+
+    .section {
+      max-width: 640px;
+      padding-bottom: 60px;
+      margin-bottom: 60px;
+      border-bottom: 1px solid var(--cream-300);
+    }
+    .section:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .section-eyebrow {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.85rem;
+      color: var(--warm-900);
+      margin-bottom: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    /* ── ABOUT ── */
+    .about-text {
+      font-size: 0.92rem;
+      color: var(--warm-700);
+      line-height: 1.85;
+      margin-bottom: 28px;
+    }
+
+    .intro-video {
+      width: 100%;
+      max-width: 560px;
+      border-radius: 8px;
+      border: 1px solid var(--cream-300);
+      display: block;
+    }
+
+    /* ── EXPERIENCE TIMELINE ── */
+    .exp-list { display: flex; flex-direction: column; }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 0 18px;
+      padding-bottom: 28px;
+      position: relative;
+    }
+    .exp-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 22px;
+      bottom: 0;
+      width: 1px;
+      background: var(--cream-300);
+    }
+    .exp-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 6px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      border: 2px solid var(--cream-200);
+      outline: 1px solid var(--accent);
+      box-sizing: content-box;
+    }
+    .exp-role {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--warm-900);
+      margin-bottom: 2px;
+    }
+    .exp-company {
+      font-size: 0.75rem;
+      color: var(--warm-500);
+      margin-bottom: 2px;
+    }
+    .exp-dates {
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .exp-bullets li {
+      font-size: 0.77rem;
+      color: var(--warm-700);
+      line-height: 1.55;
+      padding-left: 14px;
+      position: relative;
+    }
+    .exp-bullets li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── SERVICES ── */
+    .services-list { display: flex; flex-direction: column; }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 0 14px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--cream-200);
+      align-items: baseline;
+    }
+    .service-row:first-child { border-top: 1px solid var(--cream-200); }
+    .service-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-style: italic;
+      padding-top: 2px;
+    }
+    .service-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--warm-900);
+      margin-bottom: 4px;
+    }
+    .service-desc {
+      font-size: 0.77rem;
+      color: var(--warm-500);
+      line-height: 1.55;
+    }
+
+    /* ── CONTACT ── */
+    .contact-body {
+      font-size: 0.92rem;
+      color: var(--warm-700);
+      line-height: 1.8;
+      margin-bottom: 28px;
+      max-width: 440px;
+    }
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 26px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--cream-50);
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover { background: var(--warm-900); border-color: var(--warm-900); }
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-outline:hover { background: var(--accent); color: var(--cream-50); }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--cream-300);
+      padding: 16px 64px;
+      font-size: 0.7rem;
+      color: var(--warm-500);
+      grid-column: 2;
+    }
+
+    /* ── FADE-IN ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 28px 24px 24px;
+        border-right: none;
+        border-bottom: 1px solid var(--cream-300);
+      }
+      .sidebar-contact { margin-top: 16px; padding-top: 16px; }
+      .main { padding: 40px 24px 64px; }
+      .footer { grid-column: 1; padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <div class="sidebar-photo">
+      <img src="den_photo_page-0001.jpg" alt="Denisse Anne Dela Cruz" />
+    </div>
+
+    <div class="sidebar-name">Denisse Anne<br />Dela Cruz</div>
+    <div class="sidebar-role">Virtual Assistant</div>
+
+    <div class="s-rule"></div>
+
+    <nav class="sidebar-nav">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#services">Services</a>
+      <a href="#skills">Skills &amp; Tools</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="s-rule"></div>
+
+    <div class="s-label">Core Skills</div>
+    <div class="tag-cloud">
+      <span class="tag">Customer Care</span>
+      <span class="tag">Business Development</span>
+      <span class="tag">Communication</span>
+      <span class="tag">Admin Support</span>
+      <span class="tag">Problem Solving</span>
+      <span class="tag">Adaptability</span>
+      <span class="tag">Reliability</span>
+      <span class="tag">Client Relationships</span>
+    </div>
+
+    <div class="s-label">Tools</div>
+    <div class="tag-cloud">
+      <span class="tag">Apollo</span>
+      <span class="tag">JustCall</span>
+      <span class="tag">RingCentral</span>
+      <span class="tag">VoIP</span>
+      <span class="tag">Gmail</span>
+      <span class="tag">Zoom</span>
+      <span class="tag">MS Word</span>
+      <span class="tag">MS Excel</span>
+      <span class="tag">Google Calendar</span>
+      <span class="tag">Canva</span>
+    </div>
+
+    <div class="s-rule"></div>
+
+    <div class="s-label">Education</div>
+    <div class="edu-school">National College of Science &amp; Technology</div>
+    <div class="edu-detail">
+      BSBA — Marketing Management<br />
+      2019 – 2023 &middot; Dasmariñas, Cavite
+    </div>
+
+    <div class="sidebar-contact">
+      <a href="mailto:your@email.com">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        denisseannedelacruz.legacy@gmail.com
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- ABOUT -->
+    <section id="about" class="section fade-up">
+      <div class="section-eyebrow">About Me</div>
+      <h1 class="section-title">Hi, I'm Denisse.</h1>
+      <p class="about-text">
+        Denisse is an experienced professional in customer care and business development,
+        recognised for her strong communication, adaptability, and problem-solving skills.
+        She is dedicated to delivering high-quality results through attention to detail,
+        reliability, and a customer-focused approach. Proficient in outbound and email
+        outreach tools as well as data management, she thrives in fast-paced environments
+        while building strong client relationships and driving measurable success.
+      </p>
+      <video class="intro-video" autoplay muted loop playsinline>
+        <source src="vid1.mp4" type="video/mp4" />
+      </video>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section fade-up">
+      <div class="section-eyebrow">Work Experience</div>
+      <h2 class="section-title">Where I've worked</h2>
+      <div class="exp-list">
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Freelance Virtual Assistant</div>
+            <div class="exp-company">Remote</div>
+            <div class="exp-dates">July 2025 – March 2026</div>
+            <ul class="exp-bullets">
+              <li>Real Estate Management Assistant — supported property operations and client communications</li>
+              <li>Cold Caller / Appointment Setter — executed outbound campaigns and scheduled qualified meetings</li>
+              <li>Email Outreach Personnel — managed targeted campaigns to engage prospects</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Customer Service Representative</div>
+            <div class="exp-company">Synchrony Financial &middot; Northgate Cyberzone, Muntinlupa</div>
+            <div class="exp-dates">June 2025 – August 2025</div>
+            <ul class="exp-bullets">
+              <li>Delivered exceptional customer service, consistently achieving high client satisfaction</li>
+              <li>Assisted customers with credit and debit account inquiries, providing timely solutions</li>
+              <li>Diagnosed and resolved technical challenges to ensure smooth customer interactions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Customer Service — Uber Account</div>
+            <div class="exp-company">TaskUs &middot; Molino, Bacoor, Cavite</div>
+            <div class="exp-dates">March 2024 – August 2024</div>
+            <ul class="exp-bullets">
+              <li>Delivered high-quality customer service achieving consistent satisfaction scores</li>
+              <li>Assisted customers with inquiries, ensuring timely and effective resolution of issues</li>
+              <li>Diagnosed and resolved technical difficulties to maintain smooth interactions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Customer Service — T-Mobile Prepaid</div>
+            <div class="exp-company">iQor &middot; SM City Dasmariñas, Cavite</div>
+            <div class="exp-dates">October 2023 – January 2024</div>
+            <ul class="exp-bullets">
+              <li>Delivered exceptional customer service to enhance client satisfaction and loyalty</li>
+              <li>Resolved inquiries and technical concerns with a proactive, solution-oriented approach</li>
+              <li>Processed customer payments and refunds accurately via phone transactions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Clerk Intern</div>
+            <div class="exp-company">3MV Construction Corp. &middot; Dasmariñas, Cavite</div>
+            <div class="exp-dates">April 2023 – May 2023</div>
+            <ul class="exp-bullets">
+              <li>Managed company records — updated and organised data in Excel, archived physical documents</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section fade-up">
+      <div class="section-eyebrow">What I offer</div>
+      <h2 class="section-title">Services</h2>
+      <div class="services-list">
+        <div class="service-row">
+          <span class="service-num">01</span>
+          <div>
+            <div class="service-title">Email Management</div>
+            <div class="service-desc">Inbox organisation, drafting replies, flagging priorities, and keeping your communication flow clean.</div>
+          </div>
+        </div>
+        <div class="service-row">
+          <span class="service-num">02</span>
+          <div>
+            <div class="service-title">Cold Outreach &amp; Appointment Setting</div>
+            <div class="service-desc">Executing outbound campaigns, qualifying leads, and scheduling meetings that convert.</div>
+          </div>
+        </div>
+        <div class="service-row">
+          <span class="service-num">03</span>
+          <div>
+            <div class="service-title">Client Communication</div>
+            <div class="service-desc">Professional, warm correspondence — follow-ups, onboarding messages, and relationship maintenance.</div>
+          </div>
+        </div>
+        <div class="service-row">
+          <span class="service-num">04</span>
+          <div>
+            <div class="service-title">Calendar &amp; Admin Support</div>
+            <div class="service-desc">Scheduling, data entry, document creation in MS Word &amp; Excel, and day-to-day coordination.</div>
+          </div>
+        </div>
+        <div class="service-row">
+          <span class="service-num">05</span>
+          <div>
+            <div class="service-title">Real Estate VA Support</div>
+            <div class="service-desc">Property operations assistance, client communications, and transaction coordination.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- skills anchor (content lives in sidebar) -->
+    <span id="skills"></span>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section fade-up">
+      <div class="section-eyebrow">Get in touch</div>
+      <h2 class="section-title">Let's work together.</h2>
+      <p class="contact-body">
+        Ready to free up your time and drive real results? I'd love to hear about
+        what you need — reach out and let's get started.
+      </p>
+      <div class="contact-buttons">
+        <a href="mailto:your@email.com" class="btn btn-primary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Email Me
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    Denisse Anne U. Dela Cruz &mdash; Virtual Assistant &nbsp;&middot;&nbsp; &copy; 2025
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
